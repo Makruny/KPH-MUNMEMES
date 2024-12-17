@@ -1,105 +1,92 @@
 body {
     font-family: 'Roboto Condensed', sans-serif;
-    background-color: black;  /* Changed background to black */
-    color: white;  /* Changed text color to white for contrast */
+    background-color: black;
+    color: white;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: black;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #444;
-}
-
-.logo-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 10px;  /* Adjust gap between image and title */
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #222;
 }
 
-.logo {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;  /* Ensures image aspect ratio is maintained */
+#logo {
+    display: flex;
+    align-items: center;
 }
 
-.upload-section {
-    margin: 20px auto;
-    text-align: center;
-}
-
-.upload-section input[type="file"] {
+#logo img {
     margin-right: 10px;
 }
 
-#upload-btn {
-    background-color: black;
+nav ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav a {
     color: white;
-    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+#upload, #gallery {
+    padding: 20px;
+}
+
+button {
+    background-color: #555;
+    color: white;
+    padding: 10px;
     border: none;
     cursor: pointer;
 }
 
-#upload-btn:hover {
+button:hover {
     background-color: #444;
 }
 
-#meme-gallery {
+#memeGallery {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
-}
-
-.meme-container {
-    width: 200px;
-    text-align: center;
-    border: 2px solid #ccc;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .meme {
-    width: 100%;
+    width: 200px;
     height: auto;
+    position: relative;
+}
+
+.meme img {
+    width: 100%;
     border-radius: 10px;
 }
 
-.like-btn, .comment-btn, .delete-btn {
-    background-color: black;
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
     color: white;
-    padding: 5px 10px;
     border: none;
-    margin-top: 10px;
     cursor: pointer;
 }
 
-.like-btn:hover, .comment-btn:hover, .delete-btn:hover {
-    background-color: #444;
-}
-
-.comment-input {
-    margin-top: 10px;
-    padding: 5px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.comments-container {
-    margin-top: 10px;
-    text-align: left;
-}
-
-.comment {
-    padding: 5px;
-    background-color: #f7f7f7;
-    border: 1px solid #ddd;
-    margin-bottom: 5px;
-    border-radius: 5px;
+.delete-button:hover {
+    background-color: darkred;
 }

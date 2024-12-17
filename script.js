@@ -1,75 +1,93 @@
-document.getElementById("upload-btn").addEventListener("click", function() {
-    let fileInput = document.getElementById("file-input");
-    let file = fileInput.files[0];
-    if (file) {
-        let reader = new FileReader();
-        reader.onload = function(e) {
-            let memeGallery = document.getElementById("meme-gallery");
+const CLIENT_ID = 'adbbc0d7250341e';
+const ACCESS_TOKEN = '9eae8a9f78374329bbd24431b05675bc593e58c6';
 
-            let memeContainer = document.createElement("div");
-            memeContainer.classList.add("meme-container");
+// Get elements
+const uploadButton = document.getElementById('uploadButton');
+const fileInput = document.getElementById('fileInput');
+const memeGallery = document.getElementById('memeGallery');
 
-            let memeImage = document.createElement("img");
-            memeImage.src = e.target.result;
-            memeImage.classList.add("meme");
+// Function to display memes from localStorage
+function loadMemes() {
+    const memes = JSON.parse(localStorage.getItem('memes')) || [];
+    memes.forEach(meme => {
+        displayMeme(meme);
+    });
+}
 
-            let likeButton = document.createElement("button");
-            likeButton.classList.add("like-btn");
-            likeButton.textContent = "Like";
+// Function to display meme in gallery
+function displayMeme(url) {
+    const memeDiv = document.createElement('div');
+    memeDiv.classList.add('meme');
 
-            let commentButton = document.createElement("button");
-            commentButton.classList.add("comment-btn");
-            commentButton.textContent = "Comment";
+    const memeImg = document.createElement('img');
+    memeImg.src = url;
 
-            let deleteButton = document.createElement("button");
-            deleteButton.classList.add("delete-btn");
-            deleteButton.textContent = "Delete";
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = function() {
+        deleteMeme(url);
+    };
 
-            let commentsContainer = document.createElement("div");
-            commentsContainer.classList.add("comments-container");
+    memeDiv.appendChild(memeImg);
+    memeDiv.appendChild(deleteButton);
+    memeGallery.appendChild(memeDiv);
+}
 
-            let commentInput = document.createElement("input");
-            commentInput.type = "text";
-            commentInput.classList.add("comment-input");
-            commentInput.placeholder = "Add a comment...";
+// Function to upload meme to Imgur
+async function uploadMemeToImgur(file) {
+    const formData = new FormData();
+    formData.append('image', file);
 
-            let addCommentButton = document.createElement("button");
-            addCommentButton.textContent = "Post Comment";
-            addCommentButton.style.marginTop = "10px";
-            addCommentButton.style.padding = "5px 10px";
-            addCommentButton.style.backgroundColor = "black";
-            addCommentButton.style.color = "white";
-            addCommentButton.style.border = "none";
-            addCommentButton.style.cursor = "pointer";
+    const response = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Client-ID ${CLIENT_ID}`,
+        },
+        body: formData,
+    });
 
-            addCommentButton.addEventListener("click", function() {
-                if (commentInput.value.trim() !== "") {
-                    let comment = document.createElement("div");
-                    comment.classList.add("comment");
-                    comment.textContent = commentInput.value;
-                    commentsContainer.appendChild(comment);
-                    commentInput.value = "";  // Clear input after posting
-                }
-            });
+    const data = await response.json();
+    return data.data.link;  // Return the image URL
+}
 
-            // Delete meme functionality
-            deleteButton.addEventListener("click", function() {
-                memeContainer.remove();
-            });
-
-            memeContainer.appendChild(memeImage);
-            memeContainer.appendChild(likeButton);
-            memeContainer.appendChild(commentButton);
-            memeContainer.appendChild(deleteButton);
-            memeContainer.appendChild(commentInput);
-            memeContainer.appendChild(addCommentButton);
-            memeContainer.appendChild(commentsContainer);
-
-            memeGallery.appendChild(memeContainer);
-        };
-        reader.readAsDataURL(file);
-        fileInput.value = "";  // Clear file input after upload
-    } else {
-        alert("Please select an image file first.");
+// Function to handle meme upload
+async function handleUpload() {
+    const file = fileInput.files[0];
+    if (!file) {
+        alert('Please select an image to upload.');
+        return;
     }
-});
+
+    try {
+        const imageUrl = await uploadMemeToImgur(file);
+        const memes = JSON.parse(localStorage.getItem('memes')) || [];
+        memes.push(imageUrl);
+
+        localStorage.setItem('memes', JSON.stringify(memes));  // Save memes to localStorage
+        displayMeme(imageUrl);
+    } catch (error) {
+        alert('Failed to upload meme. Try again.');
+    }
+}
+
+// Function to delete meme
+function deleteMeme(url) {
+    let memes = JSON.parse(localStorage.getItem('memes')) || [];
+    memes = memes.filter(meme => meme !== url);
+    localStorage.setItem('memes', JSON.stringify(memes));
+
+    // Remove from UI
+    const memeElements = document.querySelectorAll('.meme');
+    memeElements.forEach(memeElement => {
+        if (memeElement.querySelector('img').src === url) {
+            memeElement.remove();
+        }
+    });
+}
+
+// Event listener for upload button
+uploadButton.addEventListener('click', handleUpload);
+
+// Load memes from localStorage when the page loads
+window.onload = loadMemes;

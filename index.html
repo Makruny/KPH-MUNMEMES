@@ -4,28 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KPHMUN Memes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <div id="logo">
+            <img src="logo.png" alt="KPHMUN Logo" width="100" height="100">
+            <h1>KPHMUN Memes</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#gallery">Meme Gallery</a></li>
+                <li><a href="#upload">Upload Meme</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<header>
-    <div class="logo-container">
-        <img src="logo.png" alt="KPHMUN Logo" class="logo"> <!-- Updated this line to use 'logo.png' -->
-        <h1>KPHMUN Memes</h1>
-    </div>
-</header>
+    <section id="upload">
+        <h2>Upload Meme</h2>
+        <input type="file" id="fileInput">
+        <button id="uploadButton">Upload Meme</button>
+    </section>
 
-<div class="upload-section">
-    <input type="file" id="file-input" accept="image/*">
-    <button id="upload-btn">Upload Meme</button>
-</div>
+    <section id="gallery">
+        <h2>Meme Gallery</h2>
+        <div id="memeGallery">
+            <!-- Memes will be dynamically added here -->
+        </div>
+    </section>
 
-<h2 style="text-align: center;">Meme Gallery</h2>
-
-<div id="meme-gallery"></div>
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
